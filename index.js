@@ -1,5 +1,5 @@
-const MYSQL = require("./mysql")
-const inquirer = require("./inquirer");
+const mysql = require("mysql")
+const inquirer = require("inquirer");
 const { allowedNodeEnvironmentFlags } = require("process");
 
 var connection = mysql.createConnection({
@@ -19,6 +19,7 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
+    mainMenu();
 
 
     //ends connection to the database
@@ -30,7 +31,7 @@ function mainMenu() {
         .prompt({
             name: "mainMenu",
             type: "list",
-            message: "What would you like to do?"
+            message: "What would you like to do?",
             choices: ["Add Employee", "Add Role", "Add Department", "View All Departments", "View All Employees", "View All Roles", "Update Employee"]
         })
         .then(function (answer) {
@@ -61,4 +62,6 @@ function mainMenu() {
         })
 };
 
-//function addEmployee(){}
+//function addEmployee(){
+    //console.log("About to add an employee to the DB.")
+//}
