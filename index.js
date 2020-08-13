@@ -59,4 +59,6 @@ function mainMenu() {
                 connection.end();
             }
         })
-}
+};
+
+//function addEmployee(){}
