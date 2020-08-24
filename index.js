@@ -97,7 +97,7 @@ function addEmployee() {
                 name: "manager",
                 type: "list",
                 message: "Manager?",
-                choices: ["Jermaine Cole", "Kendrick Lamar", "Nassir Jones", "Andre Benjamin"]
+                choices: ["Jermaine Lamar", "Kendrick Cole", "Nassir Jones", "Andre Benjamin"]
             },
         ])
         .then(function (answer) {
