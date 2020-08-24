@@ -31,37 +31,40 @@ function mainMenu() {
         .prompt({
             name: "mainMenu",
             type: "list",
+            name: "action",
             message: "What would you like to do?",
             choices: ["Add Employee", "Add Role", "Add Department", "View All Departments", "View All Employees", "View All Roles", "Update Employee"]
         })
-        .then(function (answer) {
-            if (answer.mainMenu === "Add Employee") {
-                addEmployee();
-
-            }
-            else if (answer.mainMenu === "Add Role") {
-                addRole();
-            }
-            else if (answer.mainMenu === "Add Department") {
-                addDepartment();
-            }
-            else if (answer.mainMenu === "View All Departments") {
-                viewDepartments();
-            }
-            else if (answer.mainMenu === "View All Employees") {
-                viewEmployees();
-            }
-            else if (answer.mainMenu === "View All Roles") {
-                viewRoles();
-            }
-            else if (answer.mainMenu === "Update Employee") {
-                updateEmployee();
-            } else {
-                connection.end();
+        .then(function (res) {
+            switch (res.action) {
+                case "Add Employee":
+                    addEmployee();
+                    break;
+                case "Add Role":
+                    addRole();
+                    break;
+                case "Add Department":
+                    addDepartment();
+                    break;
+                case "View All Departments":
+                    viewAllDepartment();
+                    break;
+                case "View All Employees":
+                    viewAllEmployee();
+                    break;
+                case "View All Roles":
+                    viewAllRole();
+                    break;
+                case "Update Employee":
+                    updateEmployee();
+                    break;
+                case "Exit":
+                    return;
             }
         })
 };
 
+// This is the function for adding a new employee
 function addEmployee() {
     console.log("Add new employee.")
     console.log("--------------------------")
@@ -104,23 +107,11 @@ function addEmployee() {
             console.log(answer.firstName)
             console.log(answer.lastName)
             console.log(answer.department)
-            connection.query(
-                "INSERT INTO employee SET ? ",
+            connection.query("INSERT INTO employee SET ? ",
                 {
                     first_name: answer.firstName,
                     last_name: answer.lastName,
                 },
-                console.log("Name Added!"),
-                "INSERT INTO department SET ?",
-                {
-                    name: answer.department,
-                },
-                console.log("Department Added!"),
-                "INSERT INTO role SET ?",
-                {
-                    title: answer.role
-                },
-                console.log("Role Added!"),
                 function (err) {
                     if (err) throw err;
                     console.log("New employee has been added.");
@@ -130,7 +121,7 @@ function addEmployee() {
         })
 };
 
-
+//This is the function for adding  a new role to an employee
 function addRole() {
     connection.query("SELECT * FROM employee", function (err, results) {
         if (err) throw err;
@@ -151,15 +142,13 @@ function addRole() {
                 }
             ])
             .then(function (answer) {
-                connection.query(
-                    "INSERT INTO role SET ?",
-                    [
-                        {
-                            title: answer.newRole,
-                            salary: answer.salary
-                        }
-                    ]
-                )
+                connection.query("INSERT INTO role SET ?",
+                    {
+                        title: answer.newRole,
+                        salary: answer.salary
+                    })
+                console.log("Role Added")
+                mainMenu()
             })
     })
 }
