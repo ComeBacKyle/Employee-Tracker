@@ -33,7 +33,7 @@ function mainMenu() {
             type: "list",
             name: "action",
             message: "What would you like to do?",
-            choices: ["Add Employee", "Add Role", "Add Department", "View All Departments", "View All Employees", "View All Roles", "Update Employee"]
+            choices: ["Add Employee", "Add Role", "Add Department", "View All Departments", "View All Employees", "View All Roles", "Update Employee", "Exit"]
         })
         .then(function (res) {
             switch (res.action) {
@@ -53,7 +53,7 @@ function mainMenu() {
                     viewAllEmployee();
                     break;
                 case "View All Roles":
-                    viewAllRole();
+                    viewAllRoles();
                     break;
                 case "Update Employee":
                     updateEmployee();
@@ -121,7 +121,7 @@ function addEmployee() {
         })
 };
 
-//This is the function for adding  a new role to an employee
+//This is the function for adding a new role to the role table
 function addRole() {
     connection.query("SELECT * FROM employee", function (err, results) {
         if (err) throw err;
@@ -153,4 +153,50 @@ function addRole() {
     })
 }
 
+// Adding Department
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "Department",
+            message: "What is the name of the new department?"
+        }
+    ]).then(function (res) {
+        connection.query("INSERT INTO department SET ?", {
+            name: res.department
+        })
+        console.log("New Department Added!")
+        mainMenu();
+    });
+}
+
+
+//View roles
+function viewAllRoles() {
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "roles",
+            message: "Which role would you like to look at?",
+            choices: function () {
+                let roles = []
+                for (var i = 0; i < res.length; i++) {
+                    roles.push(res[i].title)
+                }
+                return roles
+            }
+        }
+    ]).then(function (answer) {
+        connection.query("SELECT employee.first_name, employee.last_name, role.title, role.salary, department.department FROM employee INNER JOIN role on role.id = employee.role_id INNER JOIN department on department.id = role.department_id", function (err, res) {
+            const roles = []
+            for (var i = 0; i < res.length; i++) {
+                if (answer.role === res[i].title) {
+                    roles.push(res[i])
+                }
+                console.table(roles);
+                mainMenu();
+            };
+        });
+    });
+};
 
