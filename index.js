@@ -173,30 +173,31 @@ function addDepartment() {
 
 //View roles
 function viewAllRoles() {
-    inquirer.prompt([
-        {
-            type: "list",
-            name: "roles",
-            message: "Which role would you like to look at?",
-            choices: function () {
-                let roles = []
-                for (var i = 0; i < res.length; i++) {
-                    roles.push(res[i].title)
+    connection.query("SELECT * FROM role", function (err, res) {
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "roles",
+                message: "Which role would you like to look at?",
+                choices: function () {
+                    let roles = []
+                    for (var i = 0; i < res.length; i++) {
+                        roles.push(res[i].title)
+                    }
+                    return roles
                 }
-                return roles
             }
-        }
-    ]).then(function (answer) {
-        connection.query("SELECT employee.first_name, employee.last_name, role.title, role.salary, department.department FROM employee INNER JOIN role on role.id = employee.role_id INNER JOIN department on department.id = role.department_id", function (err, res) {
-            const roles = []
-            for (var i = 0; i < res.length; i++) {
-                if (answer.role === res[i].title) {
-                    roles.push(res[i])
-                }
-                console.table(roles);
-                mainMenu();
-            };
+        ]).then(function (answer) {
+            connection.query("SELECT employee.first_name, employee.last_name, role.title, role.salary, department.department FROM employee INNER JOIN role on role.id = employee.role_id INNER JOIN department on department.id = role.department_id", function (err, res) {
+                const roles = []
+                for (var i = 0; i < res.length; i++) {
+                    if (answer.role === res[i].title) {
+                        roles.push(res[i])
+                    }
+                    console.table(roles);
+                    mainMenu();
+                };
+            });
         });
-    });
+    })
 };
-
