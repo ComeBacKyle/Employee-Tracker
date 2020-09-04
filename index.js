@@ -115,6 +115,7 @@ function addEmployee() {
                 function (err) {
                     if (err) throw err;
                     console.log("New employee has been added.");
+                    console.log("-------------------");
                     mainMenu()
                 }
             )
@@ -147,7 +148,8 @@ function addRole() {
                         title: answer.newRole,
                         salary: answer.salary
                     })
-                console.log("Role Added")
+                console.log("Role Added");
+                console.log("------------------");
                 mainMenu()
             })
     })
@@ -165,7 +167,8 @@ function addDepartment() {
         connection.query("INSERT INTO department SET ?", {
             name: res.department
         })
-        console.log("New Department Added!")
+        console.log("New Department Added!");
+        console.log("-------------------");
         mainMenu();
     });
 }
@@ -201,3 +204,4 @@ function viewAllRoles() {
         });
     })
 };
+
